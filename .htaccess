@@ -1,0 +1,41 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [L]
+```
+
+### 2. Sur Render.com
+
+1. Créez un compte sur **render.com**
+2. Cliquez sur **"New +"** → **"Web Service"**
+3. Connectez votre repo GitHub/GitLab (ou uploadez via Git)
+4. Configurez :
+   - **Environment** : `PHP`
+   - **Build Command** : `composer install` (ou laissez vide)
+   - **Start Command** : laissez vide (Render gère Apache automatiquement)
+
+### 3. Ajouter PostgreSQL
+
+1. Dans le dashboard Render, cliquez **"New +"** → **"PostgreSQL"**
+2. Créez la base (gratuit jusqu'à 1GB)
+3. Une fois créée, copiez l'**Internal Database URL**
+
+### 4. Variables d'environnement
+
+Dans votre Web Service, allez dans **"Environment"** et ajoutez :
+```
+BOT_TOKEN = votre_token_botfatherdd
+AUTHORIZED_CHAT_ID = votre_chat_id
+DATABASE_URL = postgresql://user:pass@host/dbname
+```
+
+### 5. Déployer
+
+- Render déploiera automatiquement
+- Vous obtiendrez une URL comme : `https://votre-bot.onrender.com`
+
+### 6. Configurer le Webhook
+
+Une fois déployé, dans votre navigateur :
+```
+https://api.telegram.org/bot<VOTRE_TOKEN>/setWebhook?url=https://votre-bot.onrender.com/index.php
